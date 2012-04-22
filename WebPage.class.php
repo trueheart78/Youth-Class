@@ -89,11 +89,14 @@ class WebPage {
 		'Age'=>'shorttext',
 		'Grade'=>'shorttext',
 		'Allergies'=>'textbox',
+		'Strange Fact'=>'longtext',
 		'Favorite Colors'=>'textbox',
+		'Favorite Foods'=>'textbox',
+		'Least Fav Foods'=>'textbox',
 		'Hobbies'=>'textbox',
 		'School Activites'=>'textbox',
-		'3 Favorite Bands'=>'textbox',
-		'3 Favorite Songs'=>'textbox',
+		'Favorite Bands'=>'textbox',
+		'Favorite Songs'=>'textbox',
 		);
 	} 
 	function drawHeader(){
