@@ -1,0 +1,29 @@
+@CHARSET "UTF-8";
+html, body {
+	margin: 0 auto;
+	font-family: Arial, sans-serif;
+	font-size: 11pt;
+}
+a:link {
+	color: magenta;
+}
+a:visited{
+	color: magenta;
+}
+a:active{
+	color: magenta;
+}
+a:hover{
+	color: orange;
+	text-decoration: none;
+}
+.heading {
+	font-size: 120%;
+}
+form {
+	margin: 0;
+}
+textarea {
+	font-family: Arial, sans-serif;
+	font-size: 11pt;
+}

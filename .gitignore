@@ -1,4 +1,8 @@
+.DS_store
 .buildpath
 .project
 .settings
 .settings/*
+site.config.php
+gen-info.html
+question-*.txt

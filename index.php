@@ -1,4 +1,6 @@
 <?php
-print "Hello";
+require 'WebPage.class.php';
+
+$webPage = new WebPage();
 
 ?>
