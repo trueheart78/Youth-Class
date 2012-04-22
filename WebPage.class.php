@@ -3,6 +3,7 @@
 class WebPage {
 	private $ajax = false;
 	private $page = 'welcome';
+	private $noCookies = false;
 	
 	private $generalCookieName = 'generalInfo-Apr-22-2012';
 	private $generalQuestions = array();
@@ -14,7 +15,6 @@ class WebPage {
 
 	function __construct(){
 		$this->cookieServer = (strpos($_SERVER['HTTP_HOST'],'localhost') === 0) ? "" : $_SERVER['HTTP_HOST'];
-		//print_r($_COOKIE);
 		$this->page = (!empty($_GET['pg'])) ? $_GET['pg'] : 'welcome';
 		$this->composeGeneralQuestions();
 		$this->verifyGeneralInfoFileExists();
@@ -88,6 +88,8 @@ class WebPage {
 		'Email'=>'longtext',
 		'Age'=>'shorttext',
 		'Grade'=>'shorttext',
+		'Baptised'=>'yesno',
+		'Holy Ghost'=>'yesno',
 		'Allergies'=>'textbox',
 		'Strange Fact'=>'longtext',
 		'Favorite Colors'=>'textbox',
@@ -157,6 +159,11 @@ class WebPage {
 						print "<td width='150' align='right' valign='top'>{$question}:&nbsp;</td>";
 						print "<td width='250' align='left' valign='top'><textarea name='{$inputName}' id='{$inputName}' style='width:250px;' rows='3'></textarea></td>";
 						break;
+					case 'yesno':
+						$compoundIfStatementArray[] = "jQuery('#{$inputName}).val().length>=3";
+						print "<td width='150' align='right'>{$question}:&nbsp;</td>";
+						print "<td width='250' align='left' valign='top'><input type='radio' name='{$inputName}' value='Yes'> Yes &nbsp; <input type='radio' name='{$inputName}' value='No'> No</td>";
+						break;
 				}
 				print "</tr>";
 			}
@@ -189,7 +196,9 @@ class WebPage {
 			$this->writeNewGeneralInfo($content);
 			
 			print "The following information has been saved:<br>".$content;
-			setcookie($this->generalCookieName, 1, strtotime('+6 days'), "/", $this->cookieServer);
+			if(!$this->noCookies){
+				setcookie($this->generalCookieName, 1, strtotime('+6 days'), "/", $this->cookieServer);
+			}
 		} else if(!empty($_COOKIE[$this->generalCookieName])){
 			print "We've already got your information, but thanks for being persistant!";
 		}
@@ -220,7 +229,9 @@ class WebPage {
 				$answerWasYes = false;
 			}
 			$this->questionCookieAnswer = $questionAnswer;
-			setcookie($this->questionCookieName, $questionAnswer, strtotime('+1 year'), "/", $this->cookieServer);
+			if(!$this->noCookies){
+				setcookie($this->questionCookieName, $questionAnswer, strtotime('+1 year'), "/", $this->cookieServer);
+			}
 			$this->writeNewAnswer($answerWasYes);
 		}
 		print "It is harder to live for God now than it was in earlier times.<br>";
