@@ -92,6 +92,7 @@ class WebPage {
 		'Holy Ghost'=>'yesno',
 		'Allergies'=>'textbox',
 		'Strange Fact'=>'longtext',
+		'Favorite Subject'=>'longtext',
 		'Favorite Colors'=>'textbox',
 		'Favorite Foods'=>'textbox',
 		'Least Fav Foods'=>'textbox',
