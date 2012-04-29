@@ -5,13 +5,16 @@ class WebPage {
 	private $page = 'welcome';
 	private $noCookies = false;
 	
-	private $generalCookieName = 'generalInfo-Apr-22-2012';
+	private $generalCookieName = 'generalInfo-Apr-29-2012';
 	private $generalQuestions = array();
-	private $questionCookieName = 'harderToLiveForGodYN-Apr-22s-2012';
+	private $questionEnabled = true;
+	private $questionType = "YesNo";
+	private $questionText = "Do you believe Jesus was a prophet of God, but not actually God as a man?";
+	private $questionCookieName = 'wasJesusActuallyGodYN-Apr-29s-2012';
 	private $questionCookieAnswer = '';
 	private $cookieServer = '';
 	private $generalInfoFile = 'gen-info.html';
-	private $questionFile = 'question-apr-22-2012.txt';
+	private $questionFile = 'question-apr-29-2012.txt';
 
 	function __construct(){
 		$this->cookieServer = (strpos($_SERVER['HTTP_HOST'],'localhost') === 0) ? "" : $_SERVER['HTTP_HOST'];
@@ -91,15 +94,32 @@ class WebPage {
 		'Baptised'=>'yesno',
 		'Holy Ghost'=>'yesno',
 		'Allergies'=>'textbox',
-		'Strange Fact'=>'longtext',
-		'Favorite Subject'=>'longtext',
-		'Favorite Colors'=>'textbox',
-		'Favorite Foods'=>'textbox',
-		'Least Fav Foods'=>'textbox',
-		'Hobbies'=>'textbox',
-		'School Activites'=>'textbox',
-		'Favorite Bands'=>'textbox',
-		'Favorite Songs'=>'textbox',
+		//week 1 - Apr 22
+// 		'Strange Fact'=>'longtext',
+// 		'Favorite Subject'=>'longtext',
+// 		'Favorite Colors'=>'textbox',
+// 		'Favorite Foods'=>'textbox',
+// 		'Least Fav Foods'=>'textbox',
+// 		'Hobbies'=>'textbox',
+// 		'School Activites'=>'textbox',
+// 		'Favorite Bands'=>'textbox',
+// 		'Favorite Songs'=>'textbox',
+				
+		//week 2 - Apr 29
+		'Favorite Candy'=>'textbox',
+		'Favorite Movies'=>'textbox',
+		'Least Fav Movies'=>'textbox',
+		'Favorite TV Shows'=>'textbox',
+		'Least Fav TV Shows'=>'textbox',
+		'Favorite Quote'=>'textbox'
+				
+		//week 3
+// 		'Favorite Actor/Actress'=>'textbox',
+// 		'Favorite Characters'=>'textbox',
+// 		'Favorite Commedians'=>'textbox',
+// 		'Favorite Books'=>'textbox',
+// 		'Least Fav Books'=>'textbox',
+				
 		);
 	} 
 	function drawHeader(){
@@ -112,11 +132,14 @@ class WebPage {
 		<div align='center'>
 		<div align='left' id='mainBody'>
 		<strong class='heading'>Youth Spring 2012</strong><br>
-		<a href='index.php?pg=welcome'>Home</a> | <a href='index.php?pg=general'>General</a> | <a href='index.php?pg=question'>Question</a>";
+		<a href='index.php?pg=welcome'>Home</a> | <a href='index.php?pg=general'>General</a>";
+		if($this->questionEnabled){
+			print " | <a href='index.php?pg=question'>Question</a>";
+		}
 		if(file_exists($this->generalInfoFile)){
 			print " | <a href='".$this->generalInfoFile."' style='color:blue;'>Students</a>";
 		}
-		if(file_exists($this->questionFile)){
+		if($this->questionEnabled && file_exists($this->questionFile)){
 			print " | <a href='".$this->questionFile."' style='color:blue;'>Answers</a>";
 		}
 		
@@ -205,12 +228,14 @@ class WebPage {
 		}
 	}
 	function drawQuestion(){
-		if(!empty($_COOKIE[$this->questionCookieName])){
-			print "It is harder to live for God now than it was in earlier times.<br>";
+		if(!$this->questionEnabled){
+			print "No question this week!";
+		} else if(!empty($_COOKIE[$this->questionCookieName])){
+			print "{$this->questionText}<br>";
 			print "You answered <b>{$_COOKIE[$this->questionCookieName]}</b>"; 	
 		} else {
 			print "<form action='index.php?pg=answer' method='post'>";
-			print "It is harder to live for God now than it was in earlier times.<br>";
+			print "{$this->questionText}<br>";
 			print "<input type='checkbox' value='Yes' name='answer1' onclick='this.form.answer2.checked=false'> Yes<br>";
 			print "<input type='checkbox' value='No' name='answer2' onclick='this.form.answer1.checked=false'> No<br>";
 			print "<input type='button' value='Answer!' onclick=\"if(this.form.answer1.checked||this.form.answer2.checked){this.form.submit();}else{alert('Please select your answer.')}\">";
@@ -218,7 +243,9 @@ class WebPage {
 		}
 	}
 	function answerQuestion(){
-		if(!empty($_COOKIE[$this->questionCookieName])){
+		if(!$this->questionEnabled){
+			print "No question to answer!";
+		} else if(!empty($_COOKIE[$this->questionCookieName])){
 			$this->questionCookieAnswer = $_COOKIE[$this->questionCookieName]; 
 		} else {
 			$answerWasYes = false;
@@ -235,7 +262,7 @@ class WebPage {
 			}
 			$this->writeNewAnswer($answerWasYes);
 		}
-		print "It is harder to live for God now than it was in earlier times.<br>";
+		print "{$this->questionText}<br>";
 		print "You answered <b>{$this->questionCookieAnswer}</b>"; 	 
 	}
 	
