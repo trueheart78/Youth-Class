@@ -5,16 +5,16 @@ class WebPage {
 	private $page = 'welcome';
 	private $noCookies = false;
 	
-	private $generalCookieName = 'generalInfo-Apr-29-2012';
+	private $generalCookieName = 'generalInfo-May-06-2012';
 	private $generalQuestions = array();
 	private $questionEnabled = true;
 	private $questionType = "YesNo";
-	private $questionText = "Do you believe Jesus was a prophet of God, but not actually God as a man?";
-	private $questionCookieName = 'wasJesusActuallyGodYN-Apr-29s-2012';
+	private $questionText = "You can win souls by arguing about beliefs";
+	private $questionCookieName = 'winSoulsByArguingYN-May-06-2012';
 	private $questionCookieAnswer = '';
 	private $cookieServer = '';
 	private $generalInfoFile = 'gen-info.html';
-	private $questionFile = 'question-apr-29-2012.txt';
+	private $questionFile = 'question-may-06-2012.txt';
 
 	function __construct(){
 		$this->cookieServer = (strpos($_SERVER['HTTP_HOST'],'localhost') === 0) ? "" : $_SERVER['HTTP_HOST'];
@@ -40,11 +40,13 @@ class WebPage {
 				break;
 			case 'general_answers':
 				$this->answerGeneralInfo();
+				$this->drawQuestion();
 				break;
 			case 'welcome':
 			case 'home':
 			default:
 				$this->drawWelcome();
+				$this->drawGeneralInfo();
 				break;
 		}
 		
@@ -106,14 +108,24 @@ class WebPage {
 // 		'Favorite Songs'=>'textbox',
 				
 		//week 2 - Apr 29
-		'Favorite Candy'=>'textbox',
-		'Favorite Movies'=>'textbox',
-		'Least Fav Movies'=>'textbox',
-		'Favorite TV Shows'=>'textbox',
-		'Least Fav TV Shows'=>'textbox',
-		'Favorite Quote'=>'textbox'
+// 		'Favorite Candy'=>'textbox',
+// 		'Favorite Movies'=>'textbox',
+// 		'Least Fav Movies'=>'textbox',
+// 		'Favorite TV Shows'=>'textbox',
+// 		'Least Fav TV Shows'=>'textbox',
+// 		'Favorite Quote'=>'textbox'
 				
-		//week 3
+		//week 3 - May 6
+		'Dream Job'=>'textbox',
+		'Dream Car'=>'textbox',
+		'Fave College'=>'textbox',
+// 		''=>'textbox',
+// 		''=>'textbox',
+// 		''=>'textbox',
+// 		''=>'textbox',
+		
+		
+		
 // 		'Favorite Actor/Actress'=>'textbox',
 // 		'Favorite Characters'=>'textbox',
 // 		'Favorite Commedians'=>'textbox',
@@ -200,23 +212,25 @@ class WebPage {
 	}
 	function answerGeneralInfo(){
 		if(count($_POST) && empty($_COOKIE[$this->generalCookieName])){
-			$content = "<table width='400' cellspacing='0'>";
-			$content .= "<td width='150' align='right' valign='top'>Date:&nbsp;</td>";
-			$content .= "<td width='250' align='left' valign='top'>".date('m/d/Y')."</td>";
+			$content = "<table width='400' cellspacing='0'>\n";
+			$content .= "\t<tr>\n";
+			$content .= "\t\t<td width='150' align='right' valign='top'>Date:&nbsp;</td>\n";
+			$content .= "\t\t<td width='250' align='left' valign='top'>".date('m/d/Y')."</td>\n";
+			$content .= "\t</tr>\n";
 			foreach($this->generalQuestions as $question=>$type){
 				$inputName = str_replace(' ','_',$question);
 				$_POST[$inputName] = htmlspecialchars($_POST[$inputName]);
-				$content .= "<tr>";
+				$content .= "\t<tr>\n";
 				if($type == 'textbox'){
-					$content .= "<td width='150' align='right' valign='top'>{$question}:&nbsp;</td>";
-					$content .= "<td width='250' align='left' valign='top'>".nl2br(trim($_POST[$inputName]))."</td>";
+					$content .= "\t\t<td width='150' align='right' valign='top'>{$question}:&nbsp;</td>\n";
+					$content .= "\t\t<td width='250' align='left' valign='top'>".nl2br(trim($_POST[$inputName]))."</td>\n";
 				} else {
-					$content .= "<td width='150' align='right'>{$question}:&nbsp;</td>";
-					$content .= "<td width='250' align='left' valign='top'>".trim($_POST[$inputName])."</td>";
+					$content .= "\t\t<td width='150' align='right'>{$question}:&nbsp;</td>\n";
+					$content .= "\t\t<td width='250' align='left' valign='top'>".trim($_POST[$inputName])."</td>\n";
 				}
-				$content .= "</tr>";
+				$content .= "\t</tr>\n";
 			}
-			$content .= "</table>";
+			$content .= "</table>\n";
 			$this->writeNewGeneralInfo($content);
 			
 			print "The following information has been saved:<br>".$content;

@@ -3,6 +3,7 @@ html, body {
 	margin: 0 auto;
 	font-family: Arial, sans-serif;
 	font-size: 11pt;
+	background-color: #ffdead;
 }
 a:link {
 	color: magenta;
